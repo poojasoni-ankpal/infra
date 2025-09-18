@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: ankpal-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend-dev
+      - backend-dev
+      - frontend-uat
+      - backend-uat
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - ankpal
+
+  frontend-dev:
+    image: ${FRONTEND_DEV_IMAGE}
+    container_name: ankpal-frontend-dev
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8080:8080"   # host:container
+    networks:
+      - ankpal
+
+  backend-dev:
+    image: ${BACKEND_DEV_IMAGE}
+    container_name: ankpal-backend-dev
+    env_file:
+      - ./env/backend.dev.env
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+    networks:
+      - ankpal
+
+  frontend-uat:
+    image: ${FRONTEND_UAT_IMAGE}
+    container_name: ankpal-frontend-uat
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8081:8080"
+    networks:
+      - ankpal
+
+  backend-uat:
+    image: ${BACKEND_UAT_IMAGE}
+    container_name: ankpal-backend-uat
+    env_file:
+      - ./env/backend.uat.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - postgres
+    ports:
+      - "3001:3000"
+    networks:
+      - ankpal
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: ankpal-postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ankpal
+
+networks:
+  ankpal:
+    name: ankpal
+
+volumes:
+  postgres_data:
+    name: ankpal_postgres_data

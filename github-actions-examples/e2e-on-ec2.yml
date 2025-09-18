@@ -1,0 +1,88 @@
+name: E2E on EC2 (Cypress)
+
+on:
+  push:
+    branches:
+      - e2e_testing
+
+jobs:
+  e2e:
+    runs-on: self-hosted
+    env:
+      DEPLOY_DIR: /home/ubuntu/deployments/pravitech-e2e-testing
+      BASE_URL: 'https://qa.pravitech.com'
+      QUICK_MODE: 'false'
+      NODE_ENV: e2e
+      PORT: 3004
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - name: Install tools for local run (Act)
+        if: ${{ env.ACT }}
+        run: |
+          apt-get update
+          apt-get install -y rsync
+          npm i -g pm2
+
+      - name: Prepare Deployment Directory
+        run: |
+          mkdir -p $DEPLOY_DIR
+          rsync -av --delete ./e2e_testing/ $DEPLOY_DIR/
+
+      - name: Upload nginx config
+        run: |
+          rsync -av ./e2e_testing/nginx-test.conf ubuntu@${{ secrets.EC2_HOST }}:/tmp/nginx-e2e.conf
+
+      - name: Install Dependencies
+        run: |
+          cd $DEPLOY_DIR
+          npm ci
+
+      - name: Create .env File
+        run: |
+          cd $DEPLOY_DIR
+          cat <<EOF > .env
+          BASE_URL=$BASE_URL
+          QUICK_MODE=$QUICK_MODE
+          NODE_ENV=$NODE_ENV
+          PORT=$PORT
+          EOF
+
+      - name: Configure and Restart Nginx
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@${{ secrets.EC2_HOST }} "
+            sudo mv /tmp/nginx-e2e.conf /etc/nginx/conf.d/qa-runner.conf &&
+            sudo nginx -t &&
+            sudo systemctl restart nginx || sudo service nginx restart || sudo nginx -s reload
+          "
+
+      - name: Start/Restart E2E Server with PM2
+        run: |
+          cd $DEPLOY_DIR
+          export $(cat .env | xargs)
+          if pm2 describe e2e-server > /dev/null; then
+            echo "Restarting E2E server..."
+            pm2 delete e2e-server
+            pm2 start test-server.js --name e2e-server --update-env
+          else
+            echo "Starting E2E server..."
+            pm2 start test-server.js --name e2e-server --update-env
+          fi
+          pm2 save || true
+
+      - name: Collect Reports from EC2
+        run: |
+          rsync -av ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/deployments/pravitech-e2e-testing/cypress/reports/ ./e2e-artifacts/
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-reports
+          path: e2e-artifacts/**

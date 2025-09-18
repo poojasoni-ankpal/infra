@@ -1,0 +1,24 @@
+2025/09/12 06:28:14 [emerg] 1#1: host not found in upstream "frontend-dev" in /etc/nginx/conf.d/dev.conf:7
+2025/09/12 06:40:35 [emerg] 1#1: host not found in upstream "frontend-dev" in /etc/nginx/conf.d/dev.conf:7
+2025/09/12 06:46:08 [emerg] 1#1: host not found in upstream "frontend-dev" in /etc/nginx/conf.d/dev.conf:7
+2025/09/12 07:31:48 [error] 20#20: *20 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "GET / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:43:07 [error] 20#20: *26 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:43:07 [error] 20#20: *28 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "GET / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:48:04 [error] 20#20: *30 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:49:37 [error] 20#20: *34 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:51:09 [error] 20#20: *36 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://172.18.0.3:8080/", host: "localhost"
+2025/09/12 07:53:23 [notice] 28#28: signal process started
+2025/09/15 10:05:33 [error] 20#20: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:05:33 [warn] 20#20: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:05:33 [error] 20#20: *1 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:05:33 [warn] 20#20: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:05:38 [error] 21#21: *4 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD /api HTTP/1.1", upstream: "http://127.0.0.1:3000/api", host: "localhost"
+2025/09/15 10:05:38 [warn] 21#21: *4 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD /api HTTP/1.1", upstream: "http://127.0.0.1:3000/api", host: "localhost"
+2025/09/15 10:05:38 [error] 21#21: *4 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD /api HTTP/1.1", upstream: "http://127.0.0.1:3000/api", host: "localhost"
+2025/09/15 10:05:38 [warn] 21#21: *4 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD /api HTTP/1.1", upstream: "http://127.0.0.1:3000/api", host: "localhost"
+2025/09/15 10:23:27 [error] 22#22: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:23:27 [warn] 22#22: *7 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:23:27 [error] 22#22: *7 connect() failed (111: Connection refused) while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 10:23:27 [warn] 22#22: *7 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.1, server: dev.xyz.com, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:8080/", host: "localhost"
+2025/09/15 12:04:56 [emerg] 1#1: host not found in upstream "ankpal-backend-qa" in /etc/nginx/conf.d/qa.conf:6
+2025/09/15 12:12:00 [emerg] 1#1: host not found in upstream "ankpal-backend-qa" in /etc/nginx/conf.d/qa.conf:6

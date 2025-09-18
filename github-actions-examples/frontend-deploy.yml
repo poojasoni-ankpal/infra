@@ -1,0 +1,58 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ develop, master ]
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build and push
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPO: ankpal-frontend
+        run: |
+          BRANCH=${GITHUB_REF_NAME}
+          SHA=${GITHUB_SHA::7}
+          if [ "$BRANCH" = "develop" ]; then
+            TAG="dev-$SHA"
+            LATEST="latest-dev"
+          else
+            TAG="uat-$SHA"
+            LATEST="latest-uat"
+          fi
+          docker build -t $ECR_REGISTRY/$REPO:$TAG -t $ECR_REGISTRY/$REPO:$LATEST .
+          docker push $ECR_REGISTRY/$REPO:$TAG
+          docker push $ECR_REGISTRY/$REPO:$LATEST
+      - name: Deploy via SSH to EC2
+        if: success()
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /opt/ankpal/infra
+            BRANCH=${GITHUB_REF_NAME}
+            SHA=${GITHUB_SHA::7}
+            if [ "$BRANCH" = "develop" ]; then
+              sed -i "s|^FRONTEND_DEV_IMAGE=.*|FRONTEND_DEV_IMAGE=${{ steps.login-ecr.outputs.registry }}/ankpal-frontend:dev-$SHA|" .env
+            else
+              sed -i "s|^FRONTEND_UAT_IMAGE=.*|FRONTEND_UAT_IMAGE=${{ steps.login-ecr.outputs.registry }}/ankpal-frontend:uat-$SHA|" .env
+            fi
+            ./deploy.sh pull
+
+

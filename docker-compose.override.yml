@@ -1,0 +1,48 @@
+services:
+  frontend-dev:
+    build:
+      context: ../quasar-frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE=http://localhost:3000/api
+    image: ankpal-frontend:dev-local
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8080:8080"
+
+  backend-dev:
+    build:
+      context: ../nest-backend
+      dockerfile: Dockerfile
+    image: ankpal-backend:dev-local
+    env_file:
+      - ./env/backend.dev.env
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+
+  frontend-uat:
+    build:
+      context: ../quasar-frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE=http://localhost:3001/api
+    image: ankpal-frontend:uat-local
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "8081:8080"
+
+  backend-uat:
+    build:
+      context: ../nest-backend
+      dockerfile: Dockerfile
+    image: ankpal-backend:uat-local
+    env_file:
+      - ./env/backend.uat.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3001:3000"
