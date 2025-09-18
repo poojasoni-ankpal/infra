@@ -14,7 +14,7 @@ Structure
 
 Prerequisites
 - Docker and Docker Compose v2
-- Domains pointing to EC2 public IP: dev.xyz.com, uat.xyz.com
+- Domains pointing to EC2 public IP: dev.pravitech.com, uat.pravitech.com
 - Security group allows ports 80/443 (HTTPS not configured here; consider using a load balancer or certbot container)
 
 Quick start (local)
@@ -24,8 +24,8 @@ Quick start (local)
 2) Start with local builds:
    docker compose -f docker-compose.yml -f docker-compose.override.yml up -d --build
 3) Add host entries to test locally:
-   127.0.0.1 dev.xyz.com
-   127.0.0.1 uat.xyz.com
+   127.0.0.1 dev.pravitech.com
+   127.0.0.1 uat.pravitech.com
 4) Open http://localhost (dev) and http://localhost:81 (uat)
 
 EC2 Deployment
