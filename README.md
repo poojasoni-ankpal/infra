@@ -2,8 +2,8 @@ Ankpal Monoinfra - Dev and UAT on one EC2
 
 Overview
 This folder contains a production-ready docker-compose, Nginx reverse proxy, and environment files to run:
-- dev: dev.xyz.com and dev.xyz.com/api
-- uat: uat.xyz.com and uat.xyz.com/api
+- dev: dev.pravitech.com and dev.pravitech.com/api
+- uat: uat.pravitech.com and uat.pravitech.com/api
 Both point to the same shared PostgreSQL database as requested.
 
 Structure
